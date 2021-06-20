@@ -5,7 +5,8 @@
     <meta name="description" content="proof of humanity tools">
     <meta name="author" content="Isaac">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>humanity.tools</title>
+    <title>HUMANITY.TOOLS</title>
+    <script src="rain.js"></script>
     <link rel="icon" 
       type="image/png" 
       href="favicon-32x32.png" />
@@ -14,10 +15,33 @@
 body{
     font-family:sans-serif;
     font-weight: bold;
-    background: #21263a;
+    background: whitesmoke;
     font-weight: lighter;
     margin: 20px;
-    color: #f1f1f1;
+    color: purple;
+}
+.droplets {
+    position: fixed;
+    top: -1vh;
+    font-size: 2rem;
+    transform: translateY(0);
+    animation: fall 3s linear forwards;
+}
+.droplets1 {
+    position: fixed;
+    top: -1vh;
+    font-size: 1rem;
+    transform: translateY(0);
+    animation: fall 3s linear forwards;
+}
+
+
+
+
+@keyframes fall {
+    to {
+        transform: translateY(150vh);
+    }
 }
 
 .blue_pink{
@@ -56,10 +80,10 @@ body{
 }
 
 b {
-    color: #f1f1f1;
+    color: purple;
 }
 a{ 
-    color: #f1f1f1;
+    color: purple;
     text-decoration: none;
     font-weight: bold;
     font-size: 16px;
@@ -114,7 +138,7 @@ a:hover{
 </style>
 <body>
 
-<h1><span class="blue_pink">humanity.tools</span></h1>
+<h1><span class="blue_pink">HUMANITY.TOOLS</span></h1>
 <a class="ht" href="https://graph.humanity.tools">graph.humanity.tools</a>
 <br><br>
 <a class="ht" href="https://faces.humanity.tools">faces.humanity.tools</a>
@@ -144,6 +168,8 @@ a:hover{
 <a class="ubi" href="https://pools.proofofhumanity.id/">Proof Of Humanity Pools</a>
 <br><br>
 <a class="ubi" href="https://vfat.tools/proofofhumanity/">UBI Farming Calculator</a>
+<br><br>
+<a class="ubi" href="https://ubi-rebel-alliance.gitbook.io/handbook/">UBI Rebel Alliance</a>
 <br><br>
 <a class="ubi" href="https://ubi.kalland.com/">Add UBI to MetaMask</a>
 <br><br>
