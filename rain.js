@@ -16,4 +16,4 @@ function createWaterDroplets() {
     }, 5000);
 }
 
-setInterval(createWaterDroplets, 300);
+setInterval(createWaterDroplets, 10000);
