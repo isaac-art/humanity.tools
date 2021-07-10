@@ -176,62 +176,135 @@ a:hover{
 
 </style>
 <body>
+<script src="https://cdn.ethers.io/lib/ethers-5.1.umd.min.js" type="text/javascript">
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script type="text/javascript">
+
+async function start(){
+    async function getActiveToken(){
+        let isIPFS = false
+        let name = await ubgContract.name()
+        $('#nft_name').text(name)
+        let idx = await ubgContract.activeNFTindex()
+        let tokenURI = await ubgContract.tokenURI(0) 
+
+        if(tokenURI.substring(0, 7) == 'ipfs://'){
+            isIPFS = true
+            tokenURI = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')
+        }
+
+        await axios.get(tokenURI)
+            .then(async(res) => {
+                console.log(res.data)
+                let image = ""
+                if(isIPFS){
+                  let im = res.data.image.replace('ipfs://', '')
+                  image = "https://ipfs.io/ipfs/"+im
+                }else{
+                  image = res.data.image
+                }
+                $('#ubg').attr('src', image)
+            })
+            .catch((error)=>{
+                console.log(error)
+                return false
+            })
+
+        // setTimeout(this.getActiveTokenLoop, 14000)
+        ubgContract.on("Displaying", (sender, nft, idx) => {
+            console.log(sender, nft, idx)
+            getActiveTokenLoop()
+        });
+    }
+
+    const ubg_abi = [
+        "event Displaying(address _sender, address _nft, uint256 index)",
+        "function activeNFTindex() public view returns (uint256)",
+        "function lastUpdate() public view returns (uint256)",
+        "function cost() public view returns (uint256)",
+        "function display(address _add, uint256 _idx) external",
+        "function name() public view returns (string memory)",
+        "function tally() public view returns (uint256)",
+        "function symbol() public view returns (string memory)",
+        "function tokenURI(uint256 tokenId) public view returns (string memory)",
+        "function burnPaymentToken() external",
+        "function updatePrice() external",
+    ]
+    const ubg_address = "0x45527f75E9e69900Dd1A9C9e8af1240D4C5C9E89"
+    // const provider = await new ethers.providers.Web3Provider(window.ethereum)
+    const provider = await new ethers.providers.InfuraProvider("mainnet")
+    const ubgContract = new ethers.Contract(ubg_address, ubg_abi, provider)
+    getActiveToken()
+}
+
+start()
+</script>
 
 <div class="header ">
   <span class="blood">HUMANITY.TOOLS</span>
-</div><br><br>
-<a class="ht" href="https://graph.humanity.tools">graph.humanity.tools</a>
+</div>
 <br><br>
-<a class="ht" href="https://faces.humanity.tools">faces.humanity.tools</a>
-<br><br>
-<a class="ht" href="https://list.humanity.tools">list.humanity.tools</a>
-<br><br><br>
-<hr>
-<h2 span class="green_blue">PoH</h2>
-<a class="gba" href="https://www.proofofhumanity.id/">Proof of Humanity</a>
-<br><br>
-<a class="gba" href="https://kleros.gitbook.io/docs/products/proof-of-humanity/proof-of-humanity-tutorial">Proof of Humanity Tutorial</a>
-<br><br>
-<a class="gba" href="https://ipfs.kleros.io/ipfs/Qmc7ag5XohnSAozvsKsLCUbvaFyasyLtyi3H7g3mmxznPU/proof-of-humanity-registry-policy.pdf">Proof of Humanity Guidelines [PDF]</a>
-<br><br>
-<a class="gba" href="https://gov.proofofhumanity.id/">gov.proofofhumanity.id</a>
-<br><br>
-<a class="gba" href="https://snapshot.org/#/poh.eth/">PoH Snapshot</a>
-<br><br>
-<a class="gba" href="https://api.poh.dev/docs/static/index.html">PoH REST API</a> | <a class="gba" href="https://api-kovan.poh.dev/docs/static/index.html">[kovan]</a>
-<br><br>
-<a class="gba" href="https://thegraph.com/explorer/subgraph/kleros/proof-of-humanity-mainnet">Graph Protocol</a> | <a class="gba" href="https://thegraph.com/explorer/subgraph/kleros/proof-of-humanity-kovan">[kovan]</a>
-<br><br><br>
-<hr>
-<h2 class="rw">UBI</h2>
-<a class="ubi" href="https://democracy.earth/">Democracy.Earth Humanitarian Vaults</a>
-<br><br>
-<a class="ubi" href="https://pools.proofofhumanity.id/">Proof Of Humanity Pools</a>
-<br><br>
-<a class="ubi" href="https://vfat.tools/proofofhumanity/">UBI Farming Calculator</a>
-<br><br>
-<a class="ubi" href="https://ubi-rebel-alliance.gitbook.io/handbook/">UBI Rebel Alliance</a>
-<br><br>
-<a class="ubi" href="https://ubi.kalland.com/">Add UBI to MetaMask</a>
-<br><br>
-<a class="ubi" href="https://v2.info.uniswap.org/token/0xDd1Ad9A21Ce722C151A836373baBe42c868cE9a4">Uniswap Token Info</a>
-<br><br><br>
-<hr>
-<h2 class="cw">Crowdvoucher</h2>
-<a class="cv" href="https://mateoneira.com/poh_crowdvoucher/">mateoneira.com/poh_crowdvoucher</a>
-<br><br>
-<a class="cv" href="https://t.me/joinchat/OQH0QZHmEr5hZTJh">Crowdvoucher Telegram</a>
-<br><br><br>
-<hr>
-<h2 class="bm">Related Sites</h2>
 
-<a class="rs" href="https://kleros.io/">Kleros</a>
-<br><br><br>
-<hr><br>
-<b>Something to Add?</b>
-<br><br>
-Submit a Pull Request -> <a href="https://github.com/isaac-art/humanity.tools">https://github.com/isaac-art/humanity.tools</a>
+    <img id="ubg" src="" style="max-width: 50%;min-width: 300px;">
+    <p id="nft_name"></p>
+    <small>Change the artwork by burning UBI at the <a href="https://universal.basic.gallery/">Universal Basic Gallery</a></small>
+    <br><br>
+    <hr><br><br>
+    <a class="ht" href="https://graph.humanity.tools">graph.humanity.tools</a>
+    <br><br>
+    <a class="ht" href="https://faces.humanity.tools">faces.humanity.tools</a>
+    <br><br>
+    <a class="ht" href="https://list.humanity.tools">list.humanity.tools</a>
+    <br><br><br>
+    <hr>
+    <h2 span class="green_blue">PoH</h2>
+    <a class="gba" href="https://www.proofofhumanity.id/">Proof of Humanity</a>
+    <br><br>
+    <a class="gba" href="https://kleros.gitbook.io/docs/products/proof-of-humanity/proof-of-humanity-tutorial">Proof of Humanity Tutorial</a>
+    <br><br>
+    <a class="gba" href="https://ipfs.kleros.io/ipfs/Qmc7ag5XohnSAozvsKsLCUbvaFyasyLtyi3H7g3mmxznPU/proof-of-humanity-registry-policy.pdf">Proof of Humanity Guidelines [PDF]</a>
+    <br><br>
+    <a class="gba" href="https://gov.proofofhumanity.id/">gov.proofofhumanity.id</a>
+    <br><br>
+    <a class="gba" href="https://snapshot.org/#/poh.eth/">PoH Snapshot</a>
+    <br><br>
+    <a class="gba" href="https://api.poh.dev/docs/static/index.html">PoH REST API</a> | <a class="gba" href="https://api-kovan.poh.dev/docs/static/index.html">[kovan]</a>
+    <br><br>
+    <a class="gba" href="https://thegraph.com/explorer/subgraph/kleros/proof-of-humanity-mainnet">Graph Protocol</a> | <a class="gba" href="https://thegraph.com/explorer/subgraph/kleros/proof-of-humanity-kovan">[kovan]</a>
+    <br><br><br>
+    <hr>
+    <h2 class="rw">UBI</h2>
+    <a class="ubi" href="https://democracy.earth/">Democracy.Earth Humanitarian Vaults</a>
+    <br><br>
+    <a class="ubi" href="https://pools.proofofhumanity.id/">Proof Of Humanity Pools</a>
+    <br><br>
+    <a class="ubi" href="https://vfat.tools/proofofhumanity/">UBI Farming Calculator</a>
+    <br><br>
+    <a class="ubi" href="https://ubi-rebel-alliance.gitbook.io/handbook/">UBI Rebel Alliance</a>
+    <br><br>
+    <a class="ubi" href="https://ubi.kalland.com/">Add UBI to MetaMask</a>
+    <br><br>
+    <a class="ubi" href="https://v2.info.uniswap.org/token/0xDd1Ad9A21Ce722C151A836373baBe42c868cE9a4">Uniswap Token Info</a>
+    <br><br><br>
+    <hr>
+    <h2 class="cw">Crowdvoucher</h2>
+    <a class="cv" href="https://mateoneira.com/poh_crowdvoucher/">mateoneira.com/poh_crowdvoucher</a>
+    <br><br>
+    <a class="cv" href="https://t.me/joinchat/OQH0QZHmEr5hZTJh">Crowdvoucher Telegram</a>
+    <br><br><br>
+    <hr>
+    <h2 class="bm">Related Sites</h2>
 
-<br><br><br>
+    <a class="rs" href="https://kleros.io/">Kleros</a>
+    <br><br><br>
+    <hr><br>
+    <b>Something to Add?</b>
+    <br><br>
+    Submit a Pull Request -> <a href="https://github.com/isaac-art/humanity.tools">https://github.com/isaac-art/humanity.tools</a>
+
+    <br><br><br>
 </body>
 </html>
