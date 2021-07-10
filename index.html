@@ -193,7 +193,9 @@ async function start(){
 
         if(tokenURI.substring(0, 7) == 'ipfs://'){
             isIPFS = true
-            tokenURI = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')
+            tokenURI = tokenURI.replace('ipfs://', '');
+            tokenURI = tokenURI.replace('ipfs/', '');
+            tokenURI = "https://ipfs.io/ipfs/"+tokenURI
         }
 
         await axios.get(tokenURI)
@@ -201,8 +203,9 @@ async function start(){
                 console.log(res.data)
                 let image = ""
                 if(isIPFS){
-                  let im = res.data.image.replace('ipfs://', '')
-                  image = "https://ipfs.io/ipfs/"+im
+                  let im = res.data.image.replace('ipfs://', '');
+                  im = im.replace('ipfs/', '');
+                  image = "https://ipfs.io/ipfs/"+im;
                 }else{
                   image = res.data.image
                 }
