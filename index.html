@@ -186,8 +186,8 @@ a:hover{
 async function start(){
     async function getActiveToken(){
         let isIPFS = false
-        let name = await ubgContract.name()
-        $('#nft_name').text(name)
+        // let name = await ubgContract.name()
+        let name = ""
         let idx = await ubgContract.activeNFTindex()
         let tokenURI = await ubgContract.tokenURI(0) 
 
@@ -209,6 +209,8 @@ async function start(){
                 }else{
                   image = res.data.image
                 }
+                name = res.data.name
+                $('#nft_name').text(name)
                 $('#ubg').attr('src', image)
             })
             .catch((error)=>{
@@ -252,7 +254,7 @@ start()
 <br><br>
 
     <img id="ubg" src="" style="max-width: 50%;min-width: 300px;">
-    <p id="nft_name"></p>
+    <i><p id="nft_name"></p></i>
     <small>Change the artwork by burning UBI at the <a href="https://universal.basic.gallery/">Universal Basic Gallery</a></small>
     <br><br>
     <hr><br><br>
